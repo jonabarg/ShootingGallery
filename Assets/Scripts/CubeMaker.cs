@@ -12,7 +12,7 @@ public class CubeMaker : MonoBehaviour {
     protected List<int> targetsHit = new List<int>();
 
     protected void makeCube(int index) {
-        position = new Vector3(Random.Range(-10, 10), Random.Range(-3, 5), Random.Range(-2, 2));
+        position = new Vector3(Random.Range(-10, 10), Random.Range(8, 12), Random.Range(-2, 2));
         if (positions.Contains(position)) {
             makeCube(index);
         }
@@ -26,7 +26,7 @@ public class CubeMaker : MonoBehaviour {
     }
 
     protected void moveCube(int index) {
-        position = new Vector3(Random.Range(-10, 10), Random.Range(-3, 5), Random.Range(-2, 2));
+        position = new Vector3(Random.Range(-10, 10), Random.Range(8, 12), Random.Range(-2, 2));
         if (positions.Contains(position)) {
             moveCube(index);
         }
@@ -79,5 +79,9 @@ public class CubeMaker : MonoBehaviour {
                 Debug.Log("Player missed");
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider collision) {
+        moveCube(int.Parse(collision.transform.name));
     }
 }
