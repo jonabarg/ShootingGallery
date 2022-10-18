@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using UnityEngine.UI;
+using TMPro;
 
 public class CubeMaker : MonoBehaviour {
     [SerializeField]
@@ -10,6 +12,11 @@ public class CubeMaker : MonoBehaviour {
     protected Transform target;
     protected List<Transform> targets = new List<Transform>();
     protected List<int> targetsHit = new List<int>();
+
+    [SerializeField]
+    protected TextMeshProUGUI textBox;
+    public int _score = 0;
+    public int missed = 0;
 
     protected void makeCube(int index) {
         position = new Vector3(Random.Range(-10, 10), Random.Range(8, 12), Random.Range(-2, 2));
@@ -44,22 +51,6 @@ public class CubeMaker : MonoBehaviour {
         }
     }
 
-    protected void keepScore(int index) {
-        if (!targetsHit.Contains(index)) {
-            targetsHit.Add(index);
-        }
-        bool hitAll = true;
-        for (int i = 0; i < 10; i++) {
-            if (!targetsHit.Contains(i)) {
-                hitAll = false;
-            }
-        }
-        if (hitAll) {
-            Debug.Log("Player has hit all the targets at least once!");
-        }
-    }
-
-
     [SerializeField]
     protected Camera cam;
 
@@ -71,17 +62,20 @@ public class CubeMaker : MonoBehaviour {
             RaycastHit rch;
 
             if (Physics.Raycast(ray, out rch)) {
-                Debug.Log("Player clicked on Target '" + rch.transform.name + "'");
                 moveCube(int.Parse(rch.transform.name));
-                keepScore(int.Parse(rch.transform.name));
-            }
-            else {
-                Debug.Log("Player missed");
+                _score++;
             }
         }
+        textBox.text = "Score: " + _score + "\nMissed: " + missed;
     }
 
     private void OnTriggerEnter(Collider collision) {
         moveCube(int.Parse(collision.transform.name));
+        missed++;
+    }
+
+    public void buttonClick() {
+        missed = 0;
+        _score = 0;
     }
 }
